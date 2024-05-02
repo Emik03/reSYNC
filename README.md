@@ -7,3 +7,4 @@ A plugin that helps with resynching charts for the video game [Quaver](https://g
 - Allows you to offset notes, BPMs, and SVs by a specified amount.
 - Can be performed locally on the region selected, or globally across the whole chart if no notes are selected.
 
+![image](https://github.com/Emik03/reSYNC/assets/14614115/69413351-6639-4720-b7e7-65ade4e3a4c1)
