@@ -1,15 +1,3 @@
---- @class HitObjectInfo
-
---- @field StartTime number
---- @field Lane 1|2|3|4|5|6|7|8
---- @field EndTime number
---- @field HitSound any
---- @field EditorLayer integer
-
---- @class ScrollVelocityInfo
---- @field StartTime number
---- @field Multiplier number
-
 -- The main function
 function draw()
     imgui.Begin("re:||SYNC")
@@ -19,6 +7,7 @@ function draw()
     local note = get("note", true)
     local bpm = get("bpm", true)
     local sv = get("sv", true)
+    local bm = get("bm", true)
 
     _, ms = imgui.InputFloat("ms", ms)
 
@@ -27,25 +16,31 @@ function draw()
     _, note = imgui.Checkbox("include notes", note)
     _, bpm = imgui.Checkbox("include bpm", bpm)
     _, sv = imgui.Checkbox("include sv", sv)
+    _, bm = imgui.Checkbox("include bookmark", bm)
 
 	Separator()
 
     if imgui.Button("go") then
-        resync(ms, note, bpm, sv)
+        resync(ms, note, bpm, sv, bm)
     end
 
     state.SetValue("ms", ms)
     state.SetValue("note", note)
     state.SetValue("bpm", bpm)
     state.SetValue("sv", sv)
+    state.SetValue("bm", bm)
 
     imgui.End()
 end
 
 --- Resyncs the chart.
 --- @param ms number
-function resync(ms, note, bpm, sv)
-    if ms == 0 or (not note and not bpm and not sv) then
+--- @param note boolean
+--- @param bpm boolean
+--- @param sv boolean
+--- @param bm boolean
+function resync(ms, note, bpm, sv, bm)
+    if ms == 0 or (not note and not bpm and not sv and not bm) then
         return
     end
 
@@ -55,6 +50,8 @@ function resync(ms, note, bpm, sv)
     local bpmsToRemove = {}
     local svsToAdd = {}
     local svsToRemove = {}
+    local bmsToAdd = {}
+    local bmsToRemove = {}
     local min = 1 / 0
     local max = -1 / 0
     local objects = map.HitObjects
@@ -93,13 +90,22 @@ function resync(ms, note, bpm, sv)
         end
     end
 
+    if bm then
+        for _, x in pairs(map.Bookmarks) do
+            if not selected or (x.StartTime >= min and x.StartTime <= max) then
+                table.insert(svsToRemove, x)
+                table.insert(svsToAdd, utils.CreateBookmark(x.StartTime + ms, x.note))
+            end
+        end
+    end
+
     actions.PerformBatch({
         utils.CreateEditorAction(action_type.RemoveHitObjectBatch, notesToRemove),
         utils.CreateEditorAction(action_type.PlaceHitObjectBatch, notesToAdd),
         utils.CreateEditorAction(action_type.RemoveTimingPointBatch, bpmsToRemove),
         utils.CreateEditorAction(action_type.AddTimingPointBatch, bpmsToAdd),
-        utils.CreateEditorAction(action_type.RemoveScrollVelocityBatch, svsToRemove),
-        utils.CreateEditorAction(action_type.AddScrollVelocityBatch, svsToAdd)
+        utils.CreateEditorAction(action_type.RemoveBookmarkBatch, bmsToRemove),
+        utils.CreateEditorAction(action_type.AddBookmarkBatch, bmsToAdd)
     })
 end
 
