@@ -5,6 +5,7 @@ function draw()
 
     local ms = get("ms", 0)
     local note = get("note", true)
+    local ln = get("ln", true)
     local bpm = get("bpm", true)
     local sv = get("sv", true)
     local bm = get("bm", true)
@@ -14,18 +15,20 @@ function draw()
 	Separator()
 
     _, note = imgui.Checkbox("include notes", note)
-    _, bpm = imgui.Checkbox("include bpm", bpm)
-    _, sv = imgui.Checkbox("include sv", sv)
-    _, bm = imgui.Checkbox("include bookmark", bm)
+    _, ln = imgui.Checkbox("include ln tails", ln)
+    _, bpm = imgui.Checkbox("include bpms", bpm)
+    _, sv = imgui.Checkbox("include svs", sv)
+    _, bm = imgui.Checkbox("include bookmarks", bm)
 
 	Separator()
 
     if imgui.Button("go") then
-        resync(ms, note, bpm, sv, bm)
+        resync(ms, note, ln, bpm, sv, bm)
     end
 
     state.SetValue("ms", ms)
     state.SetValue("note", note)
+    state.SetValue("ln", ln)
     state.SetValue("bpm", bpm)
     state.SetValue("sv", sv)
     state.SetValue("bm", bm)
@@ -39,7 +42,7 @@ end
 --- @param bpm boolean
 --- @param sv boolean
 --- @param bm boolean
-function resync(ms, note, bpm, sv, bm)
+function resync(ms, note, ln, bpm, sv, bm)
     if ms == 0 or (not note and not bpm and not sv and not bm) then
         return
     end
@@ -63,9 +66,20 @@ function resync(ms, note, bpm, sv, bm)
     end
 
     for _, x in pairs(objects) do
-        if note then
+        if note or ln then
+            local startTime = x.StartTime
+            local endTime = x.EndTime
+
+            if note then
+                startTime = startTime + ms
+            end
+
+            if ln and endTime ~= 0 then
+                endTime = endTime + ms
+            end
+
             table.insert(notesToRemove, x)
-            table.insert(notesToAdd, utils.CreateHitObject(x.StartTime + ms, x.Lane, x.EndTime, x.HitSound, x.EditorLayer))
+            table.insert(notesToAdd, utils.CreateHitObject(startTime, x.Lane, endTime, x.HitSound, x.EditorLayer))
         end
 
         min = math.min(x.StartTime, min)
