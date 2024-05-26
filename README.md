@@ -1,11 +1,12 @@
 # re:||SYNC
 
 [![Release](https://img.shields.io/github/v/release/Emik03/reSYNC.svg?color=f8f9f2&logo=GitHub&style=for-the-badge)](https://github.com/Emik03/reSYNC/releases/latest)
+[![Workshop](https://img.shields.io/steam/downloads/3254865071?color=8be9fd&logo=Steam&style=for-the-badge)](https://steamcommunity.com/sharedfiles/filedetails/?id=3254865071)
 [![License](https://img.shields.io/github/license/Emik03/reSYNC.svg?color=6272a4&style=for-the-badge)](https://github.com/Emik03/reSYNC/blob/main/LICENSE)
 
-A plugin that helps with resynching charts for the video game [Quaver](https://github.com/Quaver/Quaver).
+A plugin that helps with resyncing charts for the video game [Quaver](https://github.com/Quaver/Quaver).
 
-![image](https://github.com/Emik03/reSYNC/assets/14614115/2abf9d8b-b0bb-4b34-b985-72d58618f84c)
+![image](https://raw.githubusercontent.com/Emik03/reSYNC/main/steam_workshop_preview.png)
 
 ### Features
 
