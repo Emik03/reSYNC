@@ -118,6 +118,8 @@ function resync(ms, note, ln, bpm, sv, bm)
         utils.CreateEditorAction(action_type.PlaceHitObjectBatch, notesToAdd),
         utils.CreateEditorAction(action_type.RemoveTimingPointBatch, bpmsToRemove),
         utils.CreateEditorAction(action_type.AddTimingPointBatch, bpmsToAdd),
+        utils.CreateEditorAction(action_type.RemoveScrollVelocityBatch, svsToRemove),
+        utils.CreateEditorAction(action_type.AddScrollVelocityBatch, svsToAdd),
         utils.CreateEditorAction(action_type.RemoveBookmarkBatch, bmsToRemove),
         utils.CreateEditorAction(action_type.AddBookmarkBatch, bmsToAdd)
     })
