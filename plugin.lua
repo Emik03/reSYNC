@@ -107,8 +107,8 @@ function resync(ms, note, ln, bpm, sv, bm)
     if bm then
         for _, x in pairs(map.Bookmarks) do
             if not selected or (x.StartTime >= min and x.StartTime <= max) then
-                table.insert(svsToRemove, x)
-                table.insert(svsToAdd, utils.CreateBookmark(x.StartTime + ms, x.note))
+                table.insert(bmsToRemove, x)
+                table.insert(bmsToAdd, utils.CreateBookmark(x.StartTime + ms, x.note))
             end
         end
     end
